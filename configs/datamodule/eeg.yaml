@@ -1,0 +1,18 @@
+_target_: src.datamodules.eeg.eeg_datamodule.EEGDataModule
+
+data_dir: ${hydra:runtime.cwd}/datasets/eeg_data/SEC-0.1/
+eeg_dict_dir: ${hydra:runtime.cwd}/src/datamodules/eeg/eeg_dict_cliplen_60_Jan-13-2023_balanced.pkl
+clip_len: 60
+forecast_len: 0
+val_ratio: 0.5
+max_clips_per_epoch: 10000
+gold_label_split_ratio: [4,3,3]
+gold_train: False
+weighted_sampler: True
+augmentation: False
+normalize: True
+age_input: False
+batch_size: 32
+seed: ${oc.select:seed,0}
+num_workers: 8
+__train_len: ${eval:"${datamodule.clip_len}*200"}

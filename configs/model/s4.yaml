@@ -1,0 +1,54 @@
+_target_: src.models.s4.model.S4Model
+d_input: 19 # default for EEG
+d_output: 2 # num classes
+l_output: 0
+d_model: 256
+n_layers: 4
+transposed: true # Actually faster than "true"
+prenorm: false
+residual: R
+norm: layer
+dropout: 0.3
+decoder_mode: pool
+decoder_mlp: false
+decoder_min_context: null #${oc.select:datamodule.min_context,null}
+age_input: false
+tie_dropout: false
+track_norms: true # Logs to wandb
+mlp: false
+layer:
+  _target_: src.models.s4.s4.S4
+  d_model: ${model.d_model} 
+  d_state: 64
+  channels: 1
+  bidirectional: false
+  activation: gelu
+  postact: glu
+  #initializer: null
+  #weight_norm: false
+  hyper_act: null
+  gate: null # 4 for GSS
+  bottleneck: null # 4 for GSS
+  # dropout: ${model.dropout} # Same as null
+  tie_dropout: ${oc.select:model.tie_dropout,null}
+  mode: nplr
+  measure: legs
+  # measure_args:
+  #   random_real: false
+  #   random_imag: false 
+  rank: 1
+  dt_min: 0.001
+  dt_max: 0.1
+  lr:
+    dt: 0.001
+    A: 0.001
+    B: 0.001
+  n_ssm: ${model.d_model} 
+  deterministic: false # Special C init
+  l_max: ${oc.select:datamodule.__train_len,null} # Grab dataset length if exists, otherwise set to 1 and kernel will automatically resize
+  verbose: true
+
+# # Optional encoder/decoder, e.g. add positional embeddings or padding masks
+# encoder: null
+# decoder: null
+

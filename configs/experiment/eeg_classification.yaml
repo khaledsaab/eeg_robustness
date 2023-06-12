@@ -1,0 +1,60 @@
+# @package _global_
+# EEG seizure classification
+
+defaults:
+  - override /trainer: default # choose trainer from 'configs/trainer/'
+  - override /model: s4
+  - override /datamodule: eeg
+  - override /optimizer: adamw
+  - override /scheduler: cosine-warmup
+  - override /callbacks: default
+  - override /logger: wandb
+  - override /metrics: [auroc_macro, acc]
+
+
+seed: 0
+
+datamodule:
+  eeg_dict_dir: ${hydra:runtime.cwd}/src/datamodules/eeg/eeg_dict_cliplen_60_Mar-03-2023_technotes.pkl
+  batch_size: 64
+  max_clips_per_epoch: 150000
+  label_key: weak_sz_label
+  
+
+model:
+  d_model: 128
+  dropout: 0.1
+  decoder_mlp: True
+  layer:
+    bidirectional: True
+    d_state: 64
+
+trainer:
+  accelerator: gpu
+  devices: 1
+  max_epochs: 200
+  num_nodes: 1
+  accumulate_grad_batches: ${div_up:${train.global_batch_size}, ${eval:${trainer.devices} * ${datamodule.batch_size} * ${trainer.num_nodes}}}
+
+
+
+callbacks:
+  model_checkpoint:
+    monitor: "val/auroc_macro"
+    mode: "max"
+  early_stopping:
+    monitor: "val/auroc_macro"
+    mode: "max"
+
+train:
+  global_batch_size: 256
+  optimizer:
+    lr: 0.004
+    weight_decay: 0.1
+    eps: 1e-6  # Huggingface's AdamW defaults eps to 1e-6
+  optimizer_param_grouping:
+    bias_weight_decay: False
+    normalization_weight_decay: False
+  scheduler:
+    num_warmup_steps: 0
+    num_training_steps: ${eval:4000 * ${trainer.max_epochs}}

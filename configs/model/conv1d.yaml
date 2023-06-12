@@ -1,0 +1,6 @@
+_target_: src.models.conv1d.Conv_1D
+d_input: 19
+d_model: 256
+d_output: 2
+kernel_size: 200
+forecasting: False

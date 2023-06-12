@@ -1,0 +1,21 @@
+_target_: src.datamodules.arima.ARIMADataModule
+
+p: 8
+d: 0
+q: 0
+n_ts: 1
+nobs_per_ts: 5000
+horizon: 1
+lag: 16
+seeds: [4]
+c: 1
+a: 1
+scale: 1
+seasonal: null
+classification: False
+normalize: True
+batch_size: 64
+num_workers: 4
+pin_memory: False
+val_ratio: 0.2
+test_ratio: 0.2

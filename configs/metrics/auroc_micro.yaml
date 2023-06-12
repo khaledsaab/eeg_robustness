@@ -1,0 +1,5 @@
+# @package eval.metrics
+auroc_macro:
+  _target_: torchmetrics.AUROC #src.metrics.torchmetrics_classification.MyAUROC
+  num_classes: 2
+  average: micro

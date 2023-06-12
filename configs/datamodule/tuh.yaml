@@ -1,0 +1,10 @@
+_target_: src.datamodules.tuh.tuh_datamodule.TUHDataModule
+
+data_dir: ${hydra:runtime.cwd}/datasets/eeg_data/tuh/resampled_signal/
+filemarker_dir: ${hydra:runtime.cwd}/src/datamodules/tuh/file_markers_tuh_v1.5.2
+clip_len: 60
+normalize: True
+batch_size: 32
+seed: ${oc.select:seed,0}
+num_workers: 8
+__train_len: ${eval:"${datamodule.clip_len}*200"}
