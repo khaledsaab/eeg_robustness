@@ -8,6 +8,7 @@ pytorch, torchvision, torchaudio, pytorch-lightning, transformers, hydra-core, r
 
 ## Training run
 
+Configurations for training runs are in the `configs/experiment` directory. To train the binary seizure onset detection model, run `python train.py experiment=eeg_classification`.
 
 ## Codebase Structure
 
@@ -34,7 +35,6 @@ Notation <br>
 
 
 ## Acknowledgements
-`csrc` directory copied from `https://github.com/HazyResearch/zoo`
 
 Code copied, adapted and inspired from the following repositories:
 - `https://github.com/HazyResearch/zoo`
@@ -45,3 +45,11 @@ Code copied, adapted and inspired from the following repositories:
 ## Citation
 
 If you use this codebase, or otherwise found our work valuable, please cite:
+
+```
+@inproceedings{saab2023towards,
+  title={Towards Trustworthy Seizure Onset Detection Using Workflow Notes},
+  author={Saab, Khaled and Tang, Siyi, and Taha, Mohamed, and Lee-Messer, Christopher, and R{\'e}, Christopher, and Rubin, Daniel},
+  year={2023},
+}
+```
